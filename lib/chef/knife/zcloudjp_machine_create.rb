@@ -3,7 +3,7 @@
 class Chef
   class Knife
     class ZcloudjpMachineCreate < Knife
-      include ZcloudBase
+      include ZcloudjpBase
       banner "knife zcloud machine create (options)"
 
 

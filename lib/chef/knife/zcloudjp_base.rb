@@ -2,7 +2,7 @@ require 'chef/knife'
 
 class Chef
   class Knife
-    module ZcloudBase
+    module ZcloudjpBase
 
       def self.included(includer)
         includer.class_eval do
@@ -29,12 +29,13 @@ class Chef
         end
       end
 
+    private
+
       def connection
         @connection = Faraday.new(:url => Chef::Config[:knife][:zcloud_api_url]) do |faraday|
-            faraday.request  :url_encoded
+          faraday.request  :url_encoded
         end
       end
-
 
       def locate_config_value(key)
         key = key.to_sym

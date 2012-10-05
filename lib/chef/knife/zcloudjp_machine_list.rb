@@ -2,9 +2,10 @@ require 'chef/knife/zcloudjp_base'
 
 class Chef
   class Knife
-    class ZcloudMachineList <Knife
-      include ZcloudBase
-      banner "knife zcloud machine list (options)"
+    class ZcloudjpMachineList < Knife
+      include ZcloudjpBase
+
+      banner "knife zcloudjp machine list (options)"
 
       def run
         connection = Faraday.new(:url => Chef::Config[:knife][:zcloud_api_url], :ssl => {:verify => false})
@@ -23,7 +24,7 @@ class Chef
           ui.color('package', :bold),
           ui.color('state', :bold),
         ]
-        
+
         machines = JSON.parse(response.body)
 
         machines.map do |machine|
