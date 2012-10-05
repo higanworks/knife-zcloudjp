@@ -1,10 +1,10 @@
-#require 'chef/knife/zcloudjp_base'
+require 'chef/knife/zcloudjp_base'
 
 class Chef
   class Knife
     class ZcloudjpMachineCreate < Knife
       include ZcloudjpBase
-      banner "knife zcloud machine create (options)"
+      banner "knife zcloudjp machine create (options)"
 
 
       deps do
@@ -120,6 +120,9 @@ class Chef
       rescue Errno::EHOSTUNREACH
         sleep 2
         false
+      rescue Errno::ENETUNREACH
+        sleep 2
+        false
       ensure
         tcp_socket && tcp_socket.close
       end
@@ -160,6 +163,13 @@ class Chef
         config[:chef_node_name] = machine['id'] unless config[:chef_node_name]
         config[:machine_name] = machine['id'].split("/")[0] unless config[:machine_name]
 
+        config[:first_boot_attributes]['zcloudjp'] = {}
+        config[:first_boot_attributes]['zcloudjp']['id'] = machine['id']
+        config[:first_boot_attributes]['zcloudjp']['type'] = machine['type']
+        config[:first_boot_attributes]['zcloudjp']['dataset'] = machine['dataset']
+
+
+
         # wait for provision the machine.
         print(".") until verify_ssh_connection(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
@@ -186,7 +196,7 @@ class Chef
           req.body = body.to_json
         end
 
-        bootstrap_for_node(machine, bootstrap_ip_address).run
+        bootstrap_node(machine, bootstrap_ip_address).run
       end
 
       def bootstrap_node(machine, bootstrap_ip_address)

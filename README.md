@@ -20,7 +20,7 @@ Put your Z Cloud url and api token to .chef/knife.rb
     knife[:zcloud_api_token] = "YOUR-API-TOKEN"
     knife[:zcloud_api_url] = "https://my.z-cloud.jp"
 
-### retreve products
+### retrieve products
 
 <pre><code>
 $ knife zcloudjp product list (options)
