@@ -23,7 +23,7 @@ Put your Z Cloud url and api token to .chef/knife.rb
 ### retreve products
 
 <pre><code>
-$ knife zcloud product list (options)
+$ knife zcloudjp product list (options)
 name                   os            dataset                      package
 SmartOS Small 1        SmartOS       sdc:sdc:smartos64:1.5.3      Small_1GB
 SmartOS Medium 2       SmartOS       sdc:sdc:smartos64:1.5.3      Medium_2GB
@@ -42,7 +42,7 @@ MySQL Large 1          SmartOS       sdc:sdc:mysql:1.4.1          Large_8GB
 ### print machine list
 
 <pre><code>
-$ knife zcloud machine list (options)
+$ knife zcloudjp machine list (options)
 name               id                                    ips                  dataset                    package     state
 Son_of_Jenkins_02  xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sdc:sdc:ubuntu10.04:0.1.0  Medium_2GB  running
 chef-sv01          xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sdc:sdc:ubuntu10.04:0.1.0  Small_1GB   running
@@ -56,7 +56,7 @@ zootest_south      xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sd
 ### create new machine and integration your chef server.
 
 <pre><code>
-$ knife zcloud machine create -I DATASET [-p PACKAGE] [-r role/recipie] (options)
+$ knife zcloudjp machine create -I DATASET [-p PACKAGE] [-r role/recipie] (options)
 </code></pre>
 
 Chef bootstrap works fine on linux virtuamachine. But doesn't work on smartmachine(smartos).
