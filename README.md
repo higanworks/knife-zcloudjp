@@ -6,15 +6,11 @@ Knife(Opscode Chef) plugin for [Z Cloud](http://z-cloud.jp).
 
 Add this line to your application's Gemfile:
 
-    gem 'knife-zcloudjp'
+    gem 'knife-zcloudjp', :git => "git://github.com/higanworks/knife-zcloudjp.git"
 
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install knife-zcloudjp
 
 ## Usage
 
@@ -27,7 +23,7 @@ Put your Z Cloud url and api token to .chef/knife.rb
 ### retreve products
 
 <pre><code>
-$ knife zcloud product list
+$ knife zcloud product list (options)
 name                   os            dataset                      package
 SmartOS Small 1        SmartOS       sdc:sdc:smartos64:1.5.3      Small_1GB
 SmartOS Medium 2       SmartOS       sdc:sdc:smartos64:1.5.3      Medium_2GB
@@ -46,7 +42,7 @@ MySQL Large 1          SmartOS       sdc:sdc:mysql:1.4.1          Large_8GB
 ### print machine list
 
 <pre><code>
-$ knife zcloud machine list
+$ knife zcloud machine list (options)
 name               id                                    ips                  dataset                    package     state
 Son_of_Jenkins_02  xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sdc:sdc:ubuntu10.04:0.1.0  Medium_2GB  running
 chef-sv01          xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sdc:sdc:ubuntu10.04:0.1.0  Small_1GB   running
@@ -60,9 +56,24 @@ zootest_south      xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sd
 ### create new machine and integration your chef server.
 
 <pre><code>
-$ knife zcloud machine create -I DATASET -p PACKAGE -N NAME(Chef-client and Zcloud nametag)
--- in test now.
+$ knife zcloud machine create -I DATASET [-p PACKAGE] [-r role/recipie] (options)
 </code></pre>
+
+Chef bootstrap works fine on linux virtuamachine. But doesn't work on smartmachine(smartos).
+
+#### workaround for smartos
+
+Login smartmachine via ssh after provision. And copy chef-client manualy.
+
+<pre><code>
+# pkg_trans /tmp/chef-{version}.{arc}.solaris
+# cp -rp chef/root/opt/chef /opt/
+# /opt/chef/bin/chef-client
+</code></pre>
+
+client.rb and validation.pem are already stored to /etc/chef directory.  
+chef-client command regists your smartmachine and perfomes run_list.
+
 
 ## Contributing
 
