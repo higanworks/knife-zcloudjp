@@ -21,7 +21,7 @@ Or install it yourself as:
 Put your Z Cloud url and api token to .chef/knife.rb
 
 
-    knife[:zcloud_api_token] = "YOUR-API=TOKEN_"
+    knife[:zcloud_api_token] = "YOUR-API-TOKEN"
     knife[:zcloud_api_url] = "https://my.z-cloud.jp"
 
 ### retreve products
@@ -48,10 +48,10 @@ MySQL Large 1          SmartOS       sdc:sdc:mysql:1.4.1          Large_8GB
 <pre><code>
 $ knife zcloud machine list
 name               id                                    ips                  dataset                    package     state
-Son_of_Jenkins_02  xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.137.38"]   sdc:sdc:ubuntu10.04:0.1.0  Medium_2GB  running
-chef-sv01          xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.137.60"]   sdc:sdc:ubuntu10.04:0.1.0  Small_1GB   running
+Son_of_Jenkins_02  xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sdc:sdc:ubuntu10.04:0.1.0  Medium_2GB  running
+chef-sv01          xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sdc:sdc:ubuntu10.04:0.1.0  Small_1GB   running
 shinobra           xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sdc:sdc:smartos64:1.5.1    Small_1GB   running
-growthforecast     xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]   sdc:sdc:smartos64:1.5.3    Small_1GB   running
+growthforecast     xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sdc:sdc:smartos64:1.5.3    Small_1GB   running
 rabi01             xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sdc:sdc:smartos64:1.5.3    Small_1GB   running
 zootest_south      xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  ["210.152.xxx.xxx"]  sdc:sdc:smartos64:1.5.3    Small_1GB   running
 </code></pre>
