@@ -29,10 +29,15 @@ class Chef
         :description => "Dataset image of the machine",
         :proc => Proc.new { |i| Chef::Config[:knife][:zcloud_dataset] = i }
 
+      option :machine_name,
+        :short => "-n NAME",
+        :long => "--machine-name NAME",
+        :description => "Name tag value for your new machne (dafault uuid's first period)"
+
       option :chef_node_name,
         :short => "-N NAME",
         :long => "--node-name NAME",
-        :description => "The Chef node name for your new node"
+        :description => "The Chef node name for your new node (default uuid)"
 
       option :ssh_user,
         :short => "-x USERNAME",
@@ -119,6 +124,8 @@ class Chef
         tcp_socket && tcp_socket.close
       end
 
+
+
       def run
         $stdout.sync = true
 
@@ -150,12 +157,34 @@ class Chef
         msg_pair("state", machine['state'])
 
         bootstrap_ip_address = machine['ips'].last
+        config[:chef_node_name] = machine['id'] unless config[:chef_node_name]
+        config[:machine_name] = machine['id'].split("/")[0] unless config[:machine_name]
+
+        # wait for provision the machine.
+        print(".") until tcp_test_ssh(bootstrap_ip_address) {
+          sleep @initial_sleep_delay ||= 10
+          # puts("done")
+        }
+
+        # for smartdc workaround. check twice.
+        sleep 10
 
         # wait for provision the machine.
         print(".") until tcp_test_ssh(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
           puts("done")
         }
+
+        # add name tag for zcloud machine
+        body = Hash.new()
+        body["value"]   = config[:machine_name]
+        
+        response = connection.put do |req|
+          req.url "/machines/#{machine['id']}/name"
+          req.headers['Content-Type'] = 'application/json'
+          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloud_api_token]
+          req.body = body.to_json
+        end
 
         bootstrap_for_node(machine, bootstrap_ip_address).run
       end
