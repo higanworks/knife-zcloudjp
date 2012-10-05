@@ -95,9 +95,9 @@ class Chef
 
       option :host_key_verify,
         :long => "--[no-]host-key-verify",
-        :description => "Verify host key, enabled by default",
+        :description => "Verify host key, disabled by default",
         :boolean => true,
-        :default => true
+        :default => false
 
 
       def tcp_test_ssh(hostname)
