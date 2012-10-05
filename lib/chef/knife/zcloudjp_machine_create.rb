@@ -1,8 +1,8 @@
-require 'chef/knife/zcloudjp_base'
+#require 'chef/knife/zcloudjp_base'
 
 class Chef
   class Knife
-    class ZcloudMachineCreate <Knife
+    class ZcloudjpMachineCreate < Knife
       include ZcloudBase
       banner "knife zcloud machine create (options)"
 
@@ -100,7 +100,7 @@ class Chef
         :default => false
 
 
-      def tcp_test_ssh(hostname)
+      def verify_ssh_connection(hostname)
         tcp_socket = TCPSocket.new(hostname, 22)
         readable = IO.select([tcp_socket], nil, nil, 5)
         if readable
@@ -148,7 +148,7 @@ class Chef
         end
 
         machine = JSON.parse(response.body, :symbolized_names =>true )
-        
+
         msg_pair("ID", machine['id'])
         msg_pair("ip", machine['ips'].last)
         msg_pair("type", machine['type'])
@@ -161,7 +161,7 @@ class Chef
         config[:machine_name] = machine['id'].split("/")[0] unless config[:machine_name]
 
         # wait for provision the machine.
-        print(".") until tcp_test_ssh(bootstrap_ip_address) {
+        print(".") until verify_ssh_connection(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
           # puts("done")
         }
@@ -170,7 +170,7 @@ class Chef
         sleep 10
 
         # wait for provision the machine.
-        print(".") until tcp_test_ssh(bootstrap_ip_address) {
+        print(".") until verify_ssh_connection(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
           puts("done")
         }
@@ -178,7 +178,7 @@ class Chef
         # add name tag for zcloud machine
         body = Hash.new()
         body["value"]   = config[:machine_name]
-        
+
         response = connection.put do |req|
           req.url "/machines/#{machine['id']}/name"
           req.headers['Content-Type'] = 'application/json'
@@ -189,13 +189,13 @@ class Chef
         bootstrap_for_node(machine, bootstrap_ip_address).run
       end
 
-      def bootstrap_for_node(machine, bootstrap_ip_address)
+      def bootstrap_node(machine, bootstrap_ip_address)
         bootstrap = Chef::Knife::Bootstrap.new
         bootstrap.name_args = [bootstrap_ip_address]
         bootstrap.config[:run_list] = config[:run_list]
         bootstrap.config[:first_boot_attributes] = config[:first_boot_attributes]
         bootstrap.config[:ssh_user] = config[:ssh_user] || "root"
-#        bootstrap.config[:ssh_password] = machine.password
+        # bootstrap.config[:ssh_password] = machine.password
         bootstrap.config[:identity_file] = config[:identity_file]
         bootstrap.config[:host_key_verify] = config[:host_key_verify]
         bootstrap.config[:chef_node_name] = config[:chef_node_name] || server.id

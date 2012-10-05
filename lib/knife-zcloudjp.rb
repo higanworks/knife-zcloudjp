@@ -1,7 +1,6 @@
-require "knife-zcloudjp/version"
-
 module Knife
   module Zcloudjp
-    # Your code goes here...
+    VERSION = "0.1.0"
+    MAJOR, MINOR, TINY = VERSION.split('.')
   end
 end
