@@ -131,7 +131,7 @@ class Chef
         body["package"]   = config[:package]
         body["name"]      = config[:chef_node_name]
 
-        connection = Faraday.new(:url => Chef::Config[:knife][:zcloud_api_url])
+        connection = Faraday.new(:url => Chef::Config[:knife][:zcloud_api_url], :ssl => {:verify => false})
  
         response = connection.post do |req|
           req.url '/machines.json'
