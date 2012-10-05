@@ -7,7 +7,7 @@ class Chef
       banner "knife zcloud machine list (options)"
 
       def run
-        connection = Faraday.new(:url => Chef::Config[:knife][:zcloud_api_url])
+        connection = Faraday.new(:url => Chef::Config[:knife][:zcloud_api_url], :ssl => {:verify => false})
 
         response = connection.get do |req|
           req.url '/machines.json'

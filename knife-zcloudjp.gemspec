@@ -4,8 +4,8 @@ require File.expand_path('../lib/knife-zcloudjp/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["sawanoboly"]
   gem.email         = ["sawanoboriyu@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Knife(Opscode Chef) plugin for Z Cloud.}
+  gem.summary       = %q{Knife(Opscode Chef) plugin for Z Cloud.}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
