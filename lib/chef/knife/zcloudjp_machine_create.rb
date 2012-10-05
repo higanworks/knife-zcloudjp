@@ -163,6 +163,13 @@ class Chef
         config[:chef_node_name] = machine['id'] unless config[:chef_node_name]
         config[:machine_name] = machine['id'].split("/")[0] unless config[:machine_name]
 
+        config[:first_boot_attributes]['zcloudjp'] = {}
+        config[:first_boot_attributes]['zcloudjp']['id'] = machine['id']
+        config[:first_boot_attributes]['zcloudjp']['type'] = machine['type']
+        config[:first_boot_attributes]['zcloudjp']['dataset'] = machine['dataset']
+
+
+
         # wait for provision the machine.
         print(".") until verify_ssh_connection(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
