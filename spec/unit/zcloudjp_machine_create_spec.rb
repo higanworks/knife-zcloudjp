@@ -5,7 +5,7 @@ describe Chef::Knife::ZcloudjpMachineCreate do
   end
 
   describe "#verify_ssh_connection" do
-    it "shoould verify ssh connection with the specified node"
+    it "should verify ssh connection with the specified node"
   end
 
   describe "#run" do
