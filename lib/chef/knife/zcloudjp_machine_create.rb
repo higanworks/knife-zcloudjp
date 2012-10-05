@@ -189,7 +189,7 @@ class Chef
           req.body = body.to_json
         end
 
-        bootstrap_for_node(machine, bootstrap_ip_address).run
+        bootstrap_node(machine, bootstrap_ip_address).run
       end
 
       def bootstrap_node(machine, bootstrap_ip_address)
