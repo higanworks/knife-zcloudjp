@@ -24,7 +24,8 @@ class Chef
             :long => "--zcloud-api-auth-url URL",
             :description => "Your Z Cloud API url",
             :default => "https://my.z-cloud.jp",
-            :proc => Proc.new { |url| Chef::Config[:knife][:zcloud_api_url] = url }
+            :proc => Proc.new { |url| Chef::Config[:knife][:zcloud_api_url] = url },
+            :default => "https://my.z-cloud.jp"
         end
       end
 
@@ -34,6 +35,17 @@ class Chef
         end
       end
 
+
+      def locate_config_value(key)
+        key = key.to_sym
+        Chef::Config[:knife][key] || config[key]
+      end
+
+      def msg_pair(label, value, color=:cyan)
+        if value && !value.to_s.empty?
+          puts "#{ui.color(label, color)}: #{value}"
+        end
+      end
 
     end
   end
