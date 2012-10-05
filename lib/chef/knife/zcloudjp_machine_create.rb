@@ -1,10 +1,10 @@
-#require 'chef/knife/zcloudjp_base'
+require 'chef/knife/zcloudjp_base'
 
 class Chef
   class Knife
     class ZcloudjpMachineCreate < Knife
       include ZcloudjpBase
-      banner "knife zcloud machine create (options)"
+      banner "knife zcloudjp machine create (options)"
 
 
       deps do
