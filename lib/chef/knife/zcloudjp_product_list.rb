@@ -5,11 +5,12 @@ class Chef
     class ZcloudjpProductList < Knife
       include ZcloudjpBase
 
+      banner "knife zcloudjp product list (options)"
+
       def run
         # TODO
         # Retrieve the product data dynamically
         # from the Niboshi REST API.
-        banner "knife zcloudjp product list (options)"
 
         productjson = File::expand_path('../../../../data/products_2012-10.json', __FILE__)
         products = JSON.parse(File.read(productjson))
