@@ -8,12 +8,14 @@ class Chef
       banner "knife zcloudjp machine list (options)"
 
       def run
-        connection = Faraday.new(:url => Chef::Config[:knife][:zcloud_api_url], :ssl => {:verify => false})
+        Chef::Log.debug("Connect to Z Cloud API #{Chef::Config[:knife][:zcloudjp_api_url]}")
+        Chef::Log.debug("Connect to Z Cloud API #{config[:zcloudjp_api_url]}")
+        connection = Faraday.new(:url => Chef::Config[:knife][:zcloudjp_api_url], :ssl => {:verify => false})
 
         response = connection.get do |req|
           req.url '/machines.json'
           req.headers['Content-Type'] = 'application/json'
-          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloud_api_token]
+          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
         end
 
         machine_list = [

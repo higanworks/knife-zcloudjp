@@ -20,14 +20,14 @@ class Chef
         :short => "-p PACKAGE",
         :long => "--package PACKAGE",
         :description => "Package of machine; default is Small_1GB",
-        :proc => Proc.new { |p| Chef::Config[:knife][:zcloud_package] = p },
+        :proc => Proc.new { |p| Chef::Config[:knife][:zcloudjp_package] = p },
         :default => "Small_1GB"
 
       option :dataset,
         :short => "-I DATASET_IMAGE",
         :long => "--dataset-image DATASET_IMAGE",
         :description => "Dataset image of the machine",
-        :proc => Proc.new { |i| Chef::Config[:knife][:zcloud_dataset] = i }
+        :proc => Proc.new { |i| Chef::Config[:knife][:zcloudjp_dataset] = i }
 
       option :machine_name,
         :short => "-n NAME",
@@ -86,11 +86,11 @@ class Chef
         :proc => lambda { |o| JSON.parse(o) },
         :default => {}
 
-      option :zcloud_metadata,
+      option :zcloudjp_metadata,
         :short => "-M JSON",
         :long => "--zcloud-metadata JSON",
         :description => "JSON string version of metadata hash to be supplied with the machine create call",
-        :proc => Proc.new { |m| Chef::Config[:knife][:zcloud_metadata] = JSON.parse(m) },
+        :proc => Proc.new { |m| Chef::Config[:knife][:zcloudjp_metadata] = JSON.parse(m) },
         :default => ""
 
       option :host_key_verify,
@@ -132,7 +132,7 @@ class Chef
       def run
         $stdout.sync = true
 
-        unless Chef::Config[:knife][:zcloud_dataset]
+        unless Chef::Config[:knife][:zcloudjp_dataset]
           ui.error("You have not provided a valid dataset image value. Please note the short option for this value recently changed from '-i' to '-I'.")
           exit 1
         end
@@ -141,12 +141,14 @@ class Chef
         body["package"]   = config[:package]
         body["name"]      = config[:chef_node_name]
 
-        connection = Faraday.new(:url => Chef::Config[:knife][:zcloud_api_url], :ssl => {:verify => false})
+        locate_config_value(:zcloudjp_api_url)
+        # connection = Faraday.new(:url => Chef::Config[:knife][:zcloudjp_api_url], :ssl => {:verify => false})
+        connection = Faraday.new(:url => config[:zcloudjp_api_url], :ssl => {:verify => false})
  
         response = connection.post do |req|
           req.url '/machines.json'
           req.headers['Content-Type'] = 'application/json'
-          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloud_api_token]
+          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
           req.body = body.to_json
         end
 
@@ -192,7 +194,7 @@ class Chef
         response = connection.put do |req|
           req.url "/machines/#{machine['id']}/name"
           req.headers['Content-Type'] = 'application/json'
-          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloud_api_token]
+          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
           req.body = body.to_json
         end
 

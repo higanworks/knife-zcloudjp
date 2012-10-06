@@ -14,17 +14,16 @@ class Chef
             require 'faraday'
           end
 
-          option :zcloud_api_token,
+          option :zcloudjp_api_token,
             :short => "-K KEY",
-            :long => "--zcloud-api-token",
+            :long => "--zcloudjp-api-token",
             :description  => "Your Z cloud API token",
-            :proc => Proc.new { |key| Chef::Config[:knife][:zcloud_api_token] = key }
+            :proc => Proc.new { |key| Chef::Config[:knife][:zcloudjp_api_token] = key }
 
-          option :zcloud_api_url,
-            :long => "--zcloud-api-auth-url URL",
+          option :zcloudjp_api_url,
+            :long => "--zcloudjp-api-auth-url URL",
             :description => "Your Z Cloud API url",
-            :default => "https://my.z-cloud.jp",
-            :proc => Proc.new { |url| Chef::Config[:knife][:zcloud_api_url] = url },
+            :proc => Proc.new { |url| Chef::Config[:knife][:zcloudjp_api_url] = url },
             :default => "https://my.z-cloud.jp"
         end
       end
@@ -32,7 +31,7 @@ class Chef
     private
 
       def connection
-        @connection = Faraday.new(:url => Chef::Config[:knife][:zcloud_api_url]) do |faraday|
+        @connection = Faraday.new(:url => Chef::Config[:knife][:zcloudjp_api_url]) do |faraday|
           faraday.request  :url_encoded
         end
       end
