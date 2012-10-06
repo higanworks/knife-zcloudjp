@@ -146,7 +146,7 @@ class Chef
         
 
         locate_config_value(:zcloudjp_api_url)
-        connection = Faraday.new(:url => locate_config_value[:zcloudjp_api_url], :ssl => {:verify => false})
+        connection = Faraday.new(:url => locate_config_value(:zcloudjp_api_url), :ssl => {:verify => false})
  
         response = connection.post do |req|
           req.url '/machines.json'
