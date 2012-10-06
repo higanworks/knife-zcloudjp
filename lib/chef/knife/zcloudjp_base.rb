@@ -23,8 +23,8 @@ class Chef
           option :zcloudjp_api_url,
             :long => "--zcloudjp-api-auth-url URL",
             :description => "Your Z Cloud API url",
-            :proc => Proc.new { |url| Chef::Config[:knife][:zcloudjp_api_url] = url },
-            :default => "https://my.z-cloud.jp"
+            :default => "https://my.z-cloud.jp",
+            :proc => Proc.new { |url| Chef::Config[:knife][:zcloudjp_api_url] = url }
         end
       end
 

@@ -138,12 +138,15 @@ class Chef
         end
         body = Hash.new()
         body["dataset"]   = config[:dataset]
-        body["package"]   = config[:package]
+        body["package"]   = locate_config_value(:package)
         body["name"]      = config[:chef_node_name]
 
+        Chef::Log.debug("Create machine with parameters below")
+        Chef::Log.debug(body)
+        
+
         locate_config_value(:zcloudjp_api_url)
-        # connection = Faraday.new(:url => Chef::Config[:knife][:zcloudjp_api_url], :ssl => {:verify => false})
-        connection = Faraday.new(:url => config[:zcloudjp_api_url], :ssl => {:verify => false})
+        connection = Faraday.new(:url => locate_config_value[:zcloudjp_api_url], :ssl => {:verify => false})
  
         response = connection.post do |req|
           req.url '/machines.json'
