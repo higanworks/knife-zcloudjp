@@ -1,5 +1,7 @@
 # Knife::Zcloudjp
 
+[![Build Status](https://secure.travis-ci.org/higanworks/knife-zcloudjp.png)](http://travis-ci.org/higanworks/knife-zcloudjp)
+
 Knife(Opscode Chef) plugin for [Z Cloud](http://z-cloud.jp).
 
 ## Installation
