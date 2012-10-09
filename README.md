@@ -2,7 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/higanworks/knife-zcloudjp.png)](http://travis-ci.org/higanworks/knife-zcloudjp)
 
-A Knife(Opscode Chef) plugin for [Z Cloud](http://z-cloud.jp).
+A Knife(Opscode Chef) plugin for [Z Cloud](http://z-cloud.jp). This plugin allows you to retrieve product catalog, print the current machines and bootsrap a machine.
 
 ## Installation
 
