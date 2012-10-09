@@ -153,4 +153,6 @@ Login into a newly provisonned machine based on SmartOS via ssh, and introduce t
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
+## TODO
 
+- Write specs and recactor the code.
