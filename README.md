@@ -95,8 +95,7 @@ Add the following entries to your `.chef/knife.rb`.
 
     $ knife zcloudjp machine create -I DATASET [-p PACKAGE] [-r role|recipie] (options)
 
-Notice that the Linux virtual machine can be bootstrapped with the above command but the SmartMachine based on SmartOS can not be. 
-To work out this issue, please refer to the following workaround.
+Notice that the Linux virtual machine can be bootstrapped with the above command but the SmartMachine based on SmartOS can not be. To work out this issue, please refer to the following workaround.
 
 #### Workaround for bootstrapping a machine based on SmartOS
 
@@ -106,8 +105,7 @@ Login into a newly provisonned machine based on SmartOS via ssh, and introduce t
     # cp -rp chef/root/opt/chef /opt/
     # /opt/chef/bin/chef-client
 
-`client.rb` and `validation.pem` may be already stored in the `/etc/chef` directory.     
-And the `chef-client` command is available on your machine, so you can perfome `run_list` with it.
+`client.rb` and `validation.pem` may be already stored in the `/etc/chef` directory. Now `chef-client` command is available on your machine, so you can perfome `run_list` with it.
 
 <pre><code>knife zcloudjp machine create (options)
         --bootstrap-version VERSION  The version of Chef to install
