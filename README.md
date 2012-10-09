@@ -95,7 +95,7 @@ Add the following entries to your `.chef/knife.rb`.
 
     $ knife zcloudjp machine create -I DATASET [-p PACKAGE] [-r role|recipie] (options)
 
-Notice that the Linux virtual machine can be bootstrapped with the above command but the SmartMachine based on SmartOS can not be.     
+Notice that the Linux virtual machine can be bootstrapped with the above command but the SmartMachine based on SmartOS can not be. 
 To work out this issue, please refer to the following workaround.
 
 #### Workaround for bootstrapping a machine based on SmartOS
