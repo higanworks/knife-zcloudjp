@@ -6,22 +6,22 @@ Knife(Opscode Chef) plugin for [Z Cloud](http://z-cloud.jp).
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Drop the following line into your application's `Gemfile`.
 
     gem 'knife-zcloudjp', :git => "git://github.com/higanworks/knife-zcloudjp.git"
 
-And then execute:
+And execute the `bundle` command.
 
     $ bundle
 
 ## Usage
 
-Put your Z Cloud url and api token to .chef/knife.rb
+Add the following entries to your `.chef/knife.rb`.
 
     knife[:zcloudjp_api_token] = "YOUR-API-TOKEN"
     knife[:zcloudjp_api_url] = "https://my.z-cloud.jp"
 
-### retrieve products
+### Retrieve the product catalog that are currently available.
 
     $ knife zcloudjp product list (options)
     name                   os            dataset                      package
@@ -60,7 +60,7 @@ Put your Z Cloud url and api token to .chef/knife.rb
 </code></pre>
 
 
-### print machine list
+### Print the machine list
 
     $ knife zcloudjp machine list (options)
     name               id                                    ips                  dataset                    package     state
@@ -91,22 +91,23 @@ Put your Z Cloud url and api token to .chef/knife.rb
     -h, --help                       Show this message
 </code></pre>
 
-### create new machine and integration your chef server.
+### Create a new machine and integrate it to the Chef Server
 
-    $ knife zcloudjp machine create -I DATASET [-p PACKAGE] [-r role/recipie] (options)
+    $ knife zcloudjp machine create -I DATASET [-p PACKAGE] [-r role|recipie] (options)
 
-Chef bootstrap works fine on linux virtuamachine. But doesn't work on smartmachine(smartos).
+Notice that the Linux virtual machine can be bootstrapped with the above command but the SmartMachine based on SmartOS can not be.     
+To work out this issue, please refer to the following workaround.
 
-#### workaround for smartos
+#### Workaround for bootstrapping a machine based on SmartOS
 
-Login smartmachine via ssh after provision. And copy chef-client manualy.
+Login into a newly provisonned machine based on SmartOS via ssh, and introduce the `chef-client` with the following commands.
 
     # pkg_trans /tmp/chef-{version}.{arc}.solaris
     # cp -rp chef/root/opt/chef /opt/
     # /opt/chef/bin/chef-client
 
-client.rb and validation.pem are already stored to /etc/chef directory.  
-chef-client command regists your smartmachine and perfomes run_list.
+`client.rb` and `validation.pem` may be already stored in the `/etc/chef` directory.     
+And the `chef-client` command is available on your machine, so you can perfome `run_list` with it.
 
 <pre><code>knife zcloudjp machine create (options)
         --bootstrap-version VERSION  The version of Chef to install
@@ -153,3 +154,5 @@ chef-client command regists your smartmachine and perfomes run_list.
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
