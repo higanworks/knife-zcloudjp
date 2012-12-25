@@ -12,12 +12,12 @@ class Chef
         connection = Faraday.new(:url => locate_config_value(:zcloudjp_api_url), :ssl => {:verify => false})
 
         response = connection.get do |req|
-          req.url '/machines.json'
+          req.url '/products.json'
           req.headers['Content-Type'] = 'application/json'
           req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
         end
 
-        products = JSON.parse(response.body))
+        products = JSON.parse(response.body)
 
         product_list = [
           ui.color('name', :bold),
@@ -29,8 +29,8 @@ class Chef
         products.map do |product|
           product_list << product["name"]
           product_list << product["os"]
-          product_list << product["dataset"]
-          product_list << product["package"]
+          product_list << product["sdc_dataset"]
+          product_list << product["sdc_package"]
         end
 
         puts ui.list(product_list, :uneven_columns_across, 4)
