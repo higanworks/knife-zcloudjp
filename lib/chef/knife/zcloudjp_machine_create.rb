@@ -140,6 +140,7 @@ class Chef
         body["dataset"]   = config[:dataset]
         body["package"]   = locate_config_value(:package)
         body["name"]      = config[:chef_node_name]
+        body["locale"]      = "en"
 
         Chef::Log.debug("Create machine with parameters below")
         Chef::Log.debug(body)

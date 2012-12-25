@@ -1,0 +1,192 @@
+bash -c '
+<%= "export http_proxy=\"#{knife_config[:bootstrap_proxy]}\"" if knife_config[:bootstrap_proxy] -%>
+
+exists() {
+  if command -v $1 &>/dev/null
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+
+if ! exists /opt/local/bin/chef-client; then
+  ## picked out from install.sh
+  version="<%= chef_version %>"
+  platform="solaris2"
+  machine=$(/usr/bin/uname -p)
+  platform_version=$(/usr/bin/uname -r)
+  filetype="solaris"
+  filename="chef-${version}.${machine}.solaris"
+
+  echo "Downloading Chef $version for ${platform}..."
+  url="https://www.opscode.com/chef/download?v=${version}&p=${platform}&pv=${platform_version}&m=${machine}"
+  tmp_dir=$(mktemp -d -t tmp.XXXXXXXX || echo "/tmp")
+
+  if exists wget;
+  then
+    downloader="wget"
+    wget --no-check-certificate  -O "$tmp_dir/$filename" $url 2>/tmp/stderr
+  elif exists curl;
+  then
+    downloader="curl"
+    curl -k -L $url > "$tmp_dir/$filename"
+  else
+    echo "Cannot find wget or curl - cannot install Chef!"
+    exit 5
+  fi
+
+  # Check to see if we got a 404 or an empty file
+
+  unable_to_retrieve_package() {
+    echo "Unable to retrieve a valid package!"
+    echo "URL: $url"
+    exit 1
+  }
+
+  if [ $downloader == "curl" ]
+  then
+    #do curl stuff
+    grep "The specified key does not exist." "$tmp_dir/$filename" 2>&1 >/dev/null
+    if [ $? -eq 0 ] || [ ! -s "$tmp_dir/$filename" ]
+    then
+      unable_to_retrieve_package
+    fi
+  elif [ $downloader == "wget" ]
+  then
+    #do wget stuff
+    grep "ERROR 404" /tmp/stderr 2>&1 >/dev/null
+    if [ $? -eq 0 ] || [ ! -s "$tmp_dir/$filename" ]
+    then
+      unable_to_retrieve_package
+    fi
+  fi
+
+  echo "Installing Chef $version"
+
+  # functions for pkgtrans
+  _set_own(){
+    chown $2:$3 $1
+  }
+
+  _set_mod(){
+    chmod $2 $1
+  }
+
+  _set_sym(){
+    if [ ! -r $2 ];then continue; fi
+    ln -f -s $2 $1
+  }
+
+  _set_link(){
+    if [ ! -r $2 ];then continue; fi
+    mkdir -p `dirname $1`
+    ln -f $2 $1
+  }
+
+  _installer(){
+    # ignore first line
+    if [ "$1" = ":" ];then continue; fi
+
+    case $2 in
+      d)
+        if [ ! -d $4 ];then continue; fi
+        _set_own $4 $6 $7
+        _set_mod $4 $5
+        ;;
+      f) 
+        if [ ! -f $4 ];then continue; fi
+        _set_own $4 $6 $7
+        _set_mod $4 $5
+        ;;
+      i)
+        # do nothing
+        :
+        ;;
+      l)
+        arr=( `echo $4 | tr -s "=" " "` )
+        _set_link ${arr[0]} ${arr[1]}
+        ;;
+      s)
+        arr=( `echo $4 | tr -s "=" " "` )
+        _set_sym ${arr[0]} `dirname ${arr[0]}`/${arr[1]}
+        ;;
+    esac
+  }
+
+  echo "Extracting to /opt/chef ..."
+  pkgtrans  $tmp_dir/$filename $tmp_dir chef
+  cp -r $tmp_dir/chef/root/opt/chef /opt/
+
+  # main
+  echo "Fix permisssions and create links..."
+  while read LINE
+  do
+    _installer $LINE
+  done < $tmp_dir/chef/pkgmap
+
+  echo "Execute postinstall script."
+  sed -e "s@/usr/bin@/opt/local/bin@g" $tmp_dir/chef/install/postinstall | bash
+
+  if [ "$tmp_dir" != "/tmp" ];
+  then
+    rm -r "$tmp_dir"
+  fi
+
+  if [ $? -ne 0 ];
+  then
+    echo "Installation failed"
+    exit 1
+  fi
+
+fi
+
+mkdir -p /etc/chef
+
+(
+cat <<'EOP'
+<%= validation_key %>
+EOP
+) > /tmp/validation.pem
+nawk NF /tmp/validation.pem > /etc/chef/validation.pem
+rm /tmp/validation.pem
+chmod 0600 /etc/chef/validation.pem
+
+<% if @chef_config[:encrypted_data_bag_secret] -%>
+(
+cat <<'EOP'
+<%= encrypted_data_bag_secret %>
+EOP
+) > /tmp/encrypted_data_bag_secret
+nawk NF /tmp/encrypted_data_bag_secret > /etc/chef/encrypted_data_bag_secret
+rm /tmp/encrypted_data_bag_secret
+chmod 0600 /etc/chef/encrypted_data_bag_secret
+<% end -%>
+
+<%# Generate Ohai Hints -%>
+<% unless @chef_config[:knife][:hints].nil? || @chef_config[:knife][:hints].empty? -%>
+mkdir -p /etc/chef/ohai/hints
+
+<% @chef_config[:knife][:hints].each do |name, hash| -%>
+(
+cat <<'EOP'
+<%= hash.to_json %>
+EOP
+) > /etc/chef/ohai/hints/<%= name %>.json
+<% end -%>
+<% end -%>
+
+(
+cat <<'EOP'
+<%= config_content %>
+EOP
+) > /etc/chef/client.rb
+
+(
+cat <<'EOP'
+<%= first_boot.to_json %>
+EOP
+) > /etc/chef/first-boot.json
+
+<%= start_chef %>'
