@@ -8,12 +8,16 @@ class Chef
       banner "knife zcloudjp product list (options)"
 
       def run
-        # TODO
-        # Retrieve the product data dynamically
-        # from the Niboshi REST API.
+        Chef::Log.debug("Connect to Z Cloud API #{locate_config_value(:zcloudjp_api_url)}")
+        connection = Faraday.new(:url => locate_config_value(:zcloudjp_api_url), :ssl => {:verify => false})
 
-        productjson = File::expand_path('../../../../data/products_2012-10.json', __FILE__)
-        products = JSON.parse(File.read(productjson))
+        response = connection.get do |req|
+          req.url '/machines.json'
+          req.headers['Content-Type'] = 'application/json'
+          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
+        end
+
+        products = JSON.parse(response.body))
 
         product_list = [
           ui.color('name', :bold),
