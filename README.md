@@ -53,6 +53,7 @@ Add the following entries to your `.chef/knife.rb`.
     MongoDB Large 8        SmartOS       sdc:sdc:mongodb:1.4.0       Large_8GB 
 
 
+
 <pre><code>knife zcloudjp product list (options)
     -s, --server-url URL             Chef Server URL
     -k, --key KEY                    API Client Key
