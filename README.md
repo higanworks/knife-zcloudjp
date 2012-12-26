@@ -24,19 +24,33 @@ Add the following entries to your `.chef/knife.rb`.
 ### Retrieve the product catalog that are currently available.
 
     $ knife zcloudjp product list (options)
-    name                   os            dataset                      package
-    SmartOS Small 1        SmartOS       sdc:sdc:smartos64:1.5.3      Small_1GB
-    SmartOS Medium 2       SmartOS       sdc:sdc:smartos64:1.5.3      Medium_2GB
-    SmartOS Medium 4       SmartOS       sdc:sdc:smartos64:1.5.3      Medium_4GB
-    SmartOS Large 8        SmartOS       sdc:sdc:smartos64:1.5.3      Large_8GB
-    SmartOS Plus Small 1   SmartOS       sdc:sdc:smartosplus64:3.0.7  Small_1GB
-    SmartOS Plus Medium 2  SmartOS       sdc:sdc:smartosplus64:3.0.7  Medium_2GB
-    SmartOS Plus Medium 4  SmartOS       sdc:sdc:smartosplus64:3.0.7  Medium_4GB
-    SmartOS Plus Large 8   SmartOS       sdc:sdc:smartosplus64:3.0.7  Large_8GB
-    MySQL Small 1          SmartOS       sdc:sdc:mysql:1.4.1          Small_1GB
-    MySQL Medium 2         SmartOS       sdc:sdc:mysql:1.4.1          Medium_2GB
-    MySQL Medium 4         SmartOS       sdc:sdc:mysql:1.4.1          Medium_4GB
-    MySQL Large 1          SmartOS       sdc:sdc:mysql:1.4.1          Large_8GB
+    name                   os            dataset                     package   
+    MySQL Small 1          SmartOS       sdc:sdc:mysql:1.4.1         Small_1GB 
+    MySQL Large 1          SmartOS       sdc:sdc:mysql:1.4.1         Large_8GB 
+    Ubuntu Small 1         Ubuntu 10.04  sdc:sdc:ubuntu10.04:0.1.0   Small_1GB 
+    Ubuntu Large 8         Ubuntu 10.04  sdc:sdc:ubuntu10.04:0.1.0   Large_8GB 
+    CentOS Small 1         CentOS 5.7    sdc:jpc:centos-5.7:1.3.0    Small_1GB 
+    CentOS Large 8         CentOS 5.7    sdc:jpc:centos-5.7:1.3.0    Large_8GB 
+    Fedora Small 1         Fedora 14     sdc:sdc:fedora-14:1.0.1     Small_1GB 
+    Fedora Large 8         Fedora 14     sdc:sdc:fedora-14:1.0.1     Large_8GB 
+    Node.js Small 1        SmartOS       sdc:sdc:nodejs:1.4.0        Small_1GB 
+    Node.js Large 8        SmartOS       sdc:sdc:nodejs:1.4.0        Large_8GB 
+    Percona Small 1        SmartOS       sdc:sdc:percona:1.6.0       Small_1GB 
+    Percona Large 8        SmartOS       sdc:sdc:percona:1.6.0       Large_8GB 
+    Riak Small 1           SmartOS       sdc:sdc:riak:1.6.1          Small_1GB 
+    Riak Large 1           SmartOS       sdc:sdc:riak:1.6.1          Large_8GB 
+    SmartOS Small 1        SmartOS       sdc:sdc:base64:1.8.4        Small_1GB 
+    SmartOS Large 8        SmartOS       sdc:sdc:base64:1.8.4        Large_8GB 
+    CentOS Small 1         CentOS 6.0    sdc:jpc:centos-6:1.3.0      Small_1GB 
+    CentOS Large 8         CentOS 6.0    sdc:jpc:centos-6:1.3.0      Large_8GB 
+    Debian Small 1         Debian 6.0.3  sdc:sdc:debian-6.03:1.0.0   Small_1GB 
+    Debian Large 8         Debian 6.0.3  sdc:sdc:debian-6.03:1.0.0   Large_8GB 
+    SmartOS Plus Small 1   SmartOS       sdc:sdc:standard:1.0.7      Small_1GB 
+    SmartOS Plus Large 8   SmartOS       sdc:sdc:standard:1.0.7      Large_8GB 
+    Ubuntu Small 1         Ubuntu 12.04  sdc:jpc:ubuntu-12.04:2.2.1  Small_1GB 
+    Ubuntu Medium 8        Ubuntu 12.04  sdc:jpc:ubuntu-12.04:2.2.1  Large_8GB 
+    MongoDB Small 1        SmartOS       sdc:sdc:mongodb:1.4.0       Small_1GB 
+    MongoDB Large 8        SmartOS       sdc:sdc:mongodb:1.4.0       Large_8GB 
 
 
 <pre><code>knife zcloudjp product list (options)
