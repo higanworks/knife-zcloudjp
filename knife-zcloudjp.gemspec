@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.version       = Knife::Zcloudjp::VERSION
   s.authors       = ["sawanoboly"]
   s.email         = ["sawanoboriyu@gmail.com"]
-  s.description   = %q{Knife(Opscode Chef) plugin for Z Cloud.}
-  s.summary       = %q{Knife(Opscode Chef) plugin for Z Cloud.}
+  s.description   = %q{Knife(Opscode Chef) plugin for Z Cloud(Powered by Joyent).}
+  s.summary       = %q{Knife(Opscode Chef) plugin for Z Cloud(Powered by Joyent).}
   s.homepage      = ""
 
   s.files         = `git ls-files`.split($\)
