@@ -1,6 +1,9 @@
 ChangeLog for knife-zcloudjp
 ====
 
+## v0.1.5
+
+* Just add gemspec description.
 
 ## v0.1.4
 
