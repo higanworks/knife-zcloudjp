@@ -10,7 +10,7 @@ class Chef
       def run
         Chef::Log.debug("Connect to Z Cloud API #{locate_config_value(:zcloudjp_api_url)}")
 
-        connection = Faraday.new(:url => locate_config_value(:zcloudjp_api_url), :ssl => {:verify => false})
+        connection = Faraday.new(:url => locate_config_value(:zcloudjp_api_url), :ssl => {:verify => false}, :headers => {"User-Agent" => "Knife-Zcloudjp/#{::Knife::Zcloudjp::VERSION}"})
 
         response = connection.get do |req|
           req.url '/machines.json'
