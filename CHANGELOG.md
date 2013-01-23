@@ -1,6 +1,10 @@
 ChangeLog for knife-zcloudjp
 ====
 
+## v0.1.6
+
+* Change User-Agent to Knife-Zcloudjp
+
 ## v0.1.5
 
 * Just add gemspec description.
