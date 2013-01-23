@@ -6,6 +6,12 @@ A Knife(Opscode Chef) plugin for [Z Cloud](http://z-cloud.jp). This plugin allow
 
 ## Installation
 
+### from Rubygems
+
+    gem install knife-zcloudjp
+
+### from github
+
 Drop the following line into your application's `Gemfile`.
 
     gem 'knife-zcloudjp', :git => "git://github.com/higanworks/knife-zcloudjp.git"
@@ -159,6 +165,20 @@ Login into a newly provisonned machine based on SmartOS via ssh, and introduce t
     -h, --help                       Show this message
 </code></pre>
 
+
+### Start and stop machine.
+
+Use '-n' option with UUID
+
+    knife zcloudjp machine [start}stop] -n ${MACHINE_UUID}
+
+<pre><code>$ knife zcloudjp machine start -n ********-****-****-****-********
+Waiting state of machine changed to running... (Timeout: 10 seconds)
+ID: ********-****-****-****-********
+ip: 210.152.xxx.xxx
+type: smartmachine
+dataset: sdc:sdc:standard:1.0.7
+state: running</code></pre>
 
 ## Contributing
 

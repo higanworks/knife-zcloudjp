@@ -45,7 +45,7 @@ class Chef
         
 
         locate_config_value(:zcloudjp_api_url)
-        connection = Faraday.new(:url => locate_config_value(:zcloudjp_api_url), :ssl => {:verify => false})
+        connection = Faraday.new(:url => locate_config_value(:zcloudjp_api_url), :ssl => {:verify => false}, :headers => {"User-Agent" => "Knife-Zcloudjp/#{::Knife::Zcloudjp::VERSION}"})
  
         def check_current_state(connection,machine_uuid)
           response = connection.get do |req|
