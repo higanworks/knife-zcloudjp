@@ -1,4 +1,5 @@
 require 'chef/knife'
+require 'knife-zcloudjp'
 
 class Chef
   class Knife

@@ -1,6 +1,10 @@
 ChangeLog for knife-zcloudjp
 ====
 
+## v0.1.7
+
+* Bugfix: cant retreve own version
+
 ## v0.1.6
 
 * Change User-Agent to Knife-Zcloudjp
