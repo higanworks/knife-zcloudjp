@@ -4,6 +4,13 @@
 
 A Knife(Opscode Chef) plugin for [Z Cloud](http://z-cloud.jp). This plugin allows you to retrieve product catalog, print the current machines and bootstrap a machine.
 
+## F.Y.I
+
+SmartOS Bootstrap template is here.
+
+[higanworks/knife-bootstrap-smartos](https://github.com/higanworks/knife-bootstrap-smartos)
+
+
 ## Installation
 
 ### from Rubygems
