@@ -16,5 +16,6 @@ test/tmp
 test/version_tmp
 tmp
 .chef/
-*.swp
+*.sw[a-z]
+.rvmrc
 vendor/
