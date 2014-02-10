@@ -1,6 +1,12 @@
 ChangeLog for knife-zcloudjp
 ====
 
+## v0.2.0
+
+* Renewal depend gems
+  * use 'zcloudjp' Gem for API Call. HT: @azukiwasher
+
+
 ## v0.1.7
 
 * Bugfix: cant retreve own version

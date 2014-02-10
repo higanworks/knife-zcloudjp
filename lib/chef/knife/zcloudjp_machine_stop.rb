@@ -25,7 +25,7 @@ class Chef
       option :timeout,
         :short => "-t TIMEOUT_SECONDS",
         :long => "--timeout USERNAME",
-        :description => "Set Timeout(seconds). default value is 10.",
+        :description => "Set Timeout(seconds). default value is 20.",
         :default => 20
 
       def run
@@ -35,11 +35,8 @@ class Chef
           ui.error("You have not provided a machine uuid. Please note the short option for this value is '-n'.")
           exit 1
         end
-        body = Hash.new()
 
         Chef::Log.debug("Stop machine.")
-        Chef::Log.debug(body)
-
 
         locate_config_value(:zcloudjp_api_url)
         machine = client.machine.show(:id => config[:machine_uuid])
@@ -62,18 +59,19 @@ class Chef
         ## Wait
         ui.info("Waiting state of machine changed to stopped... (Timeout: #{config[:timeout]} seconds)")
         config[:timeout].to_i.times do |idx|
-          if machine.reload[:status] == "stopped" then
+          if machine.reload[:state] == "stopped" then
+            puts ''
             break
           elsif (idx + 2) == config[:timeout].to_i
             ui.warn("Timed out. Please check later.")
             exit 1
           else
+            print '.'
             sleep 2
           end
         end
 
         ## print current status
-
         msg_pair("ID", machine['id'])
         msg_pair("ip", machine['ips'].last)
         msg_pair("type", machine['type'])
