@@ -230,6 +230,14 @@ state: running</code></pre>
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-## TODO
+## <a name="authors"></a> Authors
 
-- Write specs and recactor the code.
+Created and maintained by [Sawanobori Yukihiko][author] (<sawanoboriyu@higanworks.com>)
+
+## <a name="license"></a> License
+
+Apache 2.0 (see [LICENSE][license])
+
+
+[author]:           https://github.com/sawanoboly
+[license]:          https://github.com/higanworks/knife-zcloudjp/blob/master/LICENSE
