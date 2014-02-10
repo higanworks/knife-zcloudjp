@@ -16,10 +16,12 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "chef", ">= 0.10.10"
-  s.add_dependency "faraday"
+  s.add_dependency "zcloudjp"
+  s.add_dependency "formatador"
 
   s.add_development_dependency("rspec", [">= 2.2.0"])
-  s.add_development_dependency("yard", [">= 0.5.8"])
-  s.add_development_dependency("fuubar", [">= 0.0.1"])
   s.add_development_dependency("rake")
+  s.add_development_dependency("pry")
+  s.add_development_dependency("pry-doc")
+  s.add_development_dependency("cane")
 end
