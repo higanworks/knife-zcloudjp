@@ -49,7 +49,7 @@ class Chef
           ui.warn("The machine #{config[:machine_uuid]} was not found.")
           exit
         end
- 
+
         ## Exit if already stopped.
         if machine[:state] == "stopped" then
           ui.info("The machine #{config[:machine_uuid]} already stopped.")
