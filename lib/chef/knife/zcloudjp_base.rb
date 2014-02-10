@@ -10,9 +10,8 @@ class Chef
 
           deps do
             require 'net/ssh/multi'
-            require 'readline'
+            require 'zcloudjp'
             require 'chef/json_compat'
-            require 'faraday'
           end
 
           option :zcloudjp_api_token,
@@ -31,10 +30,8 @@ class Chef
 
     private
 
-      def connection
-        @connection = Faraday.new(:url => Chef::Config[:knife][:zcloudjp_api_url]) do |faraday|
-          faraday.request  :url_encoded
-        end
+      def client
+        Zcloudjp::Client.new(:api_key => Chef::Config[:knife][:zcloudjp_api_token])
       end
 
       def locate_config_value(key)

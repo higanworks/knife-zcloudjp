@@ -8,10 +8,7 @@ class Chef
 
 
       deps do
-        require 'net/ssh/multi'
-        require 'readline'
         require 'chef/json_compat'
-        require 'faraday'
         require 'chef/knife/bootstrap'
         Chef::Knife::Bootstrap.load_deps
       end
@@ -136,27 +133,19 @@ class Chef
           ui.error("You have not provided a valid dataset image value. Please note the short option for this value recently changed from '-i' to '-I'.")
           exit 1
         end
-        body = Hash.new()
-        body["dataset"]   = config[:dataset]
-        body["package"]   = locate_config_value(:package)
-        body["name"]      = config[:chef_node_name]
-        body["locale"]      = "en"
+        options  = Hash.new()
+        options[:dataset]   = config[:dataset]
+        options[:package]   = locate_config_value(:package)
+        options[:name]      = config[:chef_node_name]
+        options[:locale]    = "en"
 
         Chef::Log.debug("Create machine with parameters below")
-        Chef::Log.debug(body)
-        
+        Chef::Log.debug(options)
+
 
         locate_config_value(:zcloudjp_api_url)
-        connection = Faraday.new(:url => locate_config_value(:zcloudjp_api_url), :ssl => {:verify => false}, :headers => {"User-Agent" => "Knife-Zcloudjp/#{::Knife::Zcloudjp::VERSION}"})
- 
-        response = connection.post do |req|
-          req.url '/machines.json'
-          req.headers['Content-Type'] = 'application/json'
-          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
-          req.body = body.to_json
-        end
 
-        machine = JSON.parse(response.body, :symbolized_names =>true )
+        machine = client.machine.create(options)
 
         msg_pair("ID", machine['id'])
         msg_pair("ip", machine['ips'].last)
@@ -179,7 +168,6 @@ class Chef
         # wait for provision the machine.
         print(".") until verify_ssh_connection(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
-          # puts("done")
         }
 
         # for smartdc workaround. check twice.
@@ -192,15 +180,16 @@ class Chef
         }
 
         # add name tag for zcloud machine
+        # sdc has bug. should update manualy..
         body = Hash.new()
         body["value"]   = config[:machine_name]
-
-        response = connection.put do |req|
-          req.url "/machines/#{machine['id']}/name"
-          req.headers['Content-Type'] = 'application/json'
-          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
-          req.body = body.to_json
-        end
+        HTTParty.put(
+          "#{Chef::Config[:knife][:zcloudjp_api_url]}/machines/#{machine['id']}/name",
+          :headers => {
+            "X-API-KEY" => Chef::Config[:knife][:zcloudjp_api_token]
+            },
+           :body => body
+        )
 
         bootstrap_node(machine, bootstrap_ip_address).run
       end
@@ -211,7 +200,6 @@ class Chef
         bootstrap.config[:run_list] = config[:run_list]
         bootstrap.config[:first_boot_attributes] = config[:first_boot_attributes]
         bootstrap.config[:ssh_user] = config[:ssh_user] || "root"
-        # bootstrap.config[:ssh_password] = machine.password
         bootstrap.config[:identity_file] = config[:identity_file]
         bootstrap.config[:host_key_verify] = config[:host_key_verify]
         bootstrap.config[:chef_node_name] = config[:chef_node_name] || server.id

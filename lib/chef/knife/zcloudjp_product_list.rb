@@ -10,15 +10,9 @@ class Chef
 
       def run
         Chef::Log.debug("Connect to Z Cloud API #{locate_config_value(:zcloudjp_api_url)}")
-#        connection = Faraday.new(:url => locate_config_value(:zcloudjp_api_url), :ssl => {:verify => false}, :headers => {"User-Agent" => "Knife-Zcloudjp/#{::Knife::Zcloudjp::VERSION}"})
 
-#        response = connection.get do |req|
-#          req.url '/products.json'
-#          req.headers['Content-Type'] = 'application/json'
-#          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
-#        end
         response = HTTParty.get(
-                     'https://my.z-cloud.jp/products.json',
+                     "#{Chef::Config[:knife][:zcloudjp_api_url]}/products.json",
                      :headers => {"X-API-KEY" => Chef::Config[:knife][:zcloudjp_api_token]}
                    )
 
