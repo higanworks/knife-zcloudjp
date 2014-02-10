@@ -8,10 +8,7 @@ class Chef
 
 
       deps do
-        require 'net/ssh/multi'
-        require 'readline'
         require 'chef/json_compat'
-        require 'faraday'
       end
 
       option :machine_uuid,
@@ -29,7 +26,7 @@ class Chef
         :short => "-t TIMEOUT_SECONDS",
         :long => "--timeout USERNAME",
         :description => "Set Timeout(seconds). default value is 10.",
-        :default => 10
+        :default => 20
 
       def run
         $stdout.sync = true
@@ -42,70 +39,40 @@ class Chef
 
         Chef::Log.debug("Stop machine.")
         Chef::Log.debug(body)
-        
+
 
         locate_config_value(:zcloudjp_api_url)
-        connection = Faraday.new(:url => locate_config_value(:zcloudjp_api_url), :ssl => {:verify => false}, :headers => {"User-Agent" => "Knife-Zcloudjp/#{::Knife::Zcloudjp::VERSION}"})
- 
-        def check_current_state(connection,machine_uuid)
-          response = connection.get do |req|
-            req.url "/machines/#{machine_uuid}.json"
-            req.headers['Content-Type'] = 'application/json'
-            req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
-          end
+        machine = client.machine.show(:id => config[:machine_uuid])
 
-          Chef::Log.debug(response.inspect)
-          case response.status
-          when 200
-            # do nothing.
-          when 404
-            ui.warn("The machine #{config[:machine_uuid]} was not found.")
-            exit
-          else
-            ui.fatal("Exit", "Unknown Error occured in API response.")
-            exit
-          end
-
-          machine = JSON.parse(response.body, :symbolized_names =>true )
-          machine['state']
+        ## Exit if missing
+        if machine[:error]
+          ui.warn("The machine #{config[:machine_uuid]} was not found.")
+          exit
         end
-
+ 
         ## Exit if already stopped.
-        if check_current_state(connection, config[:machine_uuid]) == "stopped" then
+        if machine[:state] == "stopped" then
           ui.info("The machine #{config[:machine_uuid]} already stopped.")
           exit
         end
 
         # Stop Machine
-        response = connection.post do |req|
-          req.url "/machines/#{config[:machine_uuid]}/stop.json"
-          req.headers['Content-Type'] = 'application/json'
-          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
-          req.body = body.to_json
-        end
+        machine.stop
 
         ## Wait
         ui.info("Waiting state of machine changed to stopped... (Timeout: #{config[:timeout]} seconds)")
         config[:timeout].to_i.times do |idx|
-          if check_current_state(connection, config[:machine_uuid]) == "stopped" then
+          if machine.reload[:status] == "stopped" then
             break
-          elsif (idx + 1) == config[:timeout].to_i
+          elsif (idx + 2) == config[:timeout].to_i
             ui.warn("Timed out. Please check later.")
             exit 1
           else
-              sleep 1
+            sleep 2
           end
         end
 
         ## print current status
-        response = connection.get do |req|
-          req.url "/machines/#{config[:machine_uuid]}.json"
-          req.headers['Content-Type'] = 'application/json'
-          req.headers['X-API-KEY'] = Chef::Config[:knife][:zcloudjp_api_token]
-          req.body = body.to_json
-        end
-
-        machine = JSON.parse(response.body, :symbolized_names =>true )
 
         msg_pair("ID", machine['id'])
         msg_pair("ip", machine['ips'].last)
