@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.email         = ["sawanoboriyu@gmail.com"]
   s.description   = %q{Knife(Opscode Chef) plugin for Z Cloud(Powered by Joyent).}
   s.summary       = %q{Knife(Opscode Chef) plugin for Z Cloud(Powered by Joyent).}
-  s.homepage      = ""
+  s.homepage      = "https://github.com/higanworks/knife-zcloudjp"
 
   s.files         = `git ls-files`.split($\)
   s.executables   = s.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
